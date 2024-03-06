@@ -41,7 +41,7 @@ func (o *OpenAILLMService) Chat(msg string) (string, error) {
 			},
 		}}
 
-	err := o.HttpClient.PostJson(o.Config.OpenAI.Chat.URL, headers, &requestBody, &responseObj)
+	err := o.HttpClient.Post(o.Config.OpenAI.Chat.URL, headers, &requestBody, &responseObj)
 	if err != nil {
 		return "", fmt.Errorf("could not get chat from openai: %s", err)
 	}

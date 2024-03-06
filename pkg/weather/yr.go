@@ -47,7 +47,7 @@ func (s *YrWeatherService) getYrData() (YrLocationForecast, error) {
 		"User-Agent": s.Config.Yr.User,
 	}
 
-	err := s.HttpClient.GetJson(s.Config.Yr.LocationForecast.Url, headers, &resObj)
+	err := s.HttpClient.Get(s.Config.Yr.LocationForecast.Url, headers, &resObj)
 	if err != nil {
 		return YrLocationForecast{}, err
 	}

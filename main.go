@@ -16,7 +16,7 @@ func main() {
 		return
 	}
 
-	httpClient := http_client.NewBasicHttpClient()
+	httpClient := http_client.NewJSONHttpClient()
 	weatherService := weather.NewYrWeatherService(cfg, httpClient)
 	llmService := llm.NewOpenAILLMService(cfg, httpClient)
 
