@@ -3,11 +3,29 @@ package weather
 
 import (
 	"fmt"
+	"rmcode/pkg/config"
 	"rmcode/pkg/http_client"
 )
 
+type YrLocationForecast struct {
+	Properties struct {
+		Timeseries []struct {
+			Time string `json:"time"`
+			Data struct {
+				Instant struct {
+					Details struct {
+						AirTemperature float32 `json:"air_temperature"`
+					} `json:"details"`
+				} `json:"instant"`
+			} `json:"data"`
+		} `json:"timeseries"`
+	} `json:"properties"`
+	Type string `json:"type"`
+}
+
 type YrWeatherService struct {
 	HttpClient http_client.HttpClient
+	Config     *config.Config
 }
 
 func (s *YrWeatherService) GetWeather() (*Weather, error) {
@@ -23,15 +41,13 @@ func (s *YrWeatherService) GetWeather() (*Weather, error) {
 
 // getYrData fetches weather data for a fixed coordinate
 func (s *YrWeatherService) getYrData() (YrLocationForecast, error) {
-	apiUrl := "https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=60.10&lon=9.58"
-
 	var resObj YrLocationForecast
 
 	headers := map[string]string{
-		"User-Agent": "magne@thyrhaug.net",
+		"User-Agent": s.Config.Yr.User,
 	}
 
-	err := s.HttpClient.GetJson(apiUrl, headers, &resObj)
+	err := s.HttpClient.GetJson(s.Config.Yr.LocationForecast.Url, headers, &resObj)
 	if err != nil {
 		return YrLocationForecast{}, err
 	}

@@ -2,6 +2,7 @@
 package http_client
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -10,6 +11,7 @@ import (
 
 type HttpClient interface {
 	GetJson(url string, headers map[string]string, v any) error
+	PostJson(url string, headers map[string]string, body any, v any) error
 }
 
 type BasicHttpClient struct{}
@@ -35,7 +37,12 @@ func (h *BasicHttpClient) GetJson(url string, headers map[string]string, v any) 
 		return fmt.Errorf("could not get response, %s", err)
 	}
 
-	defer response.Body.Close()
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+			fmt.Printf("could not close response body: %s", err)
+		}
+	}(response.Body)
 
 	jsonBody, err := io.ReadAll(response.Body)
 	if err != nil {
@@ -49,4 +56,44 @@ func (h *BasicHttpClient) GetJson(url string, headers map[string]string, v any) 
 	}
 
 	return nil
+}
+
+func (h *BasicHttpClient) PostJson(url string, headers map[string]string, body any, v any) error {
+	jsonRequestBody, _ := json.Marshal(body)
+	requestbodyBuffer := bytes.NewBuffer(jsonRequestBody)
+	req, err := http.NewRequest("POST", url, requestbodyBuffer)
+	if err != nil {
+		return fmt.Errorf("could not create POST request, %s", err)
+	}
+
+	for headerKey, headerValue := range headers {
+		req.Header.Add(headerKey, headerValue)
+	}
+
+	client := http.Client{}
+	response, err := client.Do(req)
+	if err != nil {
+		return fmt.Errorf("could not get response, %s", err)
+	}
+
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+			fmt.Printf("could not close response body: %s", err)
+		}
+	}(response.Body)
+
+	jsonResponseBody, err := io.ReadAll(response.Body)
+	if err != nil {
+		return fmt.Errorf("error read response body, %s", err)
+	}
+
+	err = json.Unmarshal(jsonResponseBody, &v)
+
+	if err != nil {
+		return fmt.Errorf("could not convert response body to json, %s", err)
+	}
+
+	return nil
+
 }

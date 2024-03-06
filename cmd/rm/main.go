@@ -2,17 +2,22 @@ package rm
 
 import (
 	"fmt"
-	"rmcode/pkg/http_client"
+	"rmcode/pkg/llm"
 	"rmcode/pkg/weather"
 )
 
-func Main() {
-	httpClient := http_client.NewBasicHttpClient()
-	weatherService := weather.NewYrWeatherService(httpClient)
-
+func Main(weatherService weather.WeatherService, llmService llm.LLMService) {
 	w, err := weatherService.GetWeather()
 	if err != nil {
-		fmt.Printf("Got error %s", err)
+		fmt.Printf("Got weather error %s", err)
+		return
 	}
-	fmt.Printf("Weather: %f", w.AirTemperature)
+
+	llmResponse, err := llmService.Chat(fmt.Sprintf("Talk about the weather being %.1f celsius", w.AirTemperature))
+	if err != nil {
+		fmt.Printf("Got LLM error: %s", err)
+		return
+	}
+
+	fmt.Println(llmResponse)
 }
