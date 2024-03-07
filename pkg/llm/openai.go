@@ -20,6 +20,15 @@ type openAiChatResponse struct {
 	} `json:"choices"`
 }
 
+type openAIChatRequestBodyMessage struct {
+	Role    string `json:"role"`
+	Content string `json:"content"`
+}
+type openAIChatRequestBody struct {
+	Model    string                         `json:"model"`
+	Messages []openAIChatRequestBodyMessage `json:"messages"`
+}
+
 func (o *openAILLMService) Chat(msg string) (string, error) {
 	var responseObj openAiChatResponse
 
@@ -27,20 +36,15 @@ func (o *openAILLMService) Chat(msg string) (string, error) {
 		"Authorization": fmt.Sprintf("Bearer %s", o.Config.OpenAI.Key),
 	}
 
-	requestBody := map[string]interface{}{
-		"model": "gpt-3.5-turbo",
-		"messages": []map[string]interface{}{
-			{
-				"role":    "system",
-				"content": o.Config.OpenAI.Chat.Context,
-			},
-			{
-				"role":    "user",
-				"content": msg,
-			},
-		}}
+	reqBody := openAIChatRequestBody{
+		Model: "gpt-3.5-turbo",
+		Messages: []openAIChatRequestBodyMessage{
+			{Role: "system", Content: o.Config.OpenAI.Chat.Context},
+			{Role: "user", Content: msg},
+		},
+	}
 
-	err := o.HttpClient.Post(o.Config.OpenAI.Chat.URL, headers, &requestBody, &responseObj)
+	err := o.HttpClient.Post(o.Config.OpenAI.Chat.URL, headers, &reqBody, &responseObj)
 	if err != nil {
 		return "", fmt.Errorf("could not get chat from openai: %s", err)
 	}
