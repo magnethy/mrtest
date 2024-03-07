@@ -13,5 +13,5 @@ type Weather struct {
 }
 
 func NewYrWeatherService(cfg *config.Config, httpClient http_client.HttpClient) WeatherService {
-	return &YrWeatherService{HttpClient: httpClient, Config: cfg}
+	return &yrWeatherService{HttpClient: httpClient, Config: cfg}
 }

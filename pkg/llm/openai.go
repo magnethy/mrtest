@@ -6,12 +6,12 @@ import (
 	"rmcode/pkg/http_client"
 )
 
-type OpenAILLMService struct {
+type openAILLMService struct {
 	HttpClient http_client.HttpClient
 	Config     *config.Config
 }
 
-type OpenAiChatResponse2 struct {
+type openAiChatResponse struct {
 	Choices []struct {
 		Index   int `json:"index"`
 		Message struct {
@@ -20,8 +20,8 @@ type OpenAiChatResponse2 struct {
 	} `json:"choices"`
 }
 
-func (o *OpenAILLMService) Chat(msg string) (string, error) {
-	var responseObj OpenAiChatResponse2
+func (o *openAILLMService) Chat(msg string) (string, error) {
+	var responseObj openAiChatResponse
 
 	headers := map[string]string{
 		"Authorization": fmt.Sprintf("Bearer %s", o.Config.OpenAI.Key),

@@ -8,10 +8,10 @@ import (
 	"net/http"
 )
 
-type JSONHttpClient struct{}
+type jsonHttpClient struct{}
 
 // Get fetches a URL and fills the `v` parameter with the JSON response
-func (h *JSONHttpClient) Get(url string, headers map[string]string, v any) error {
+func (h *jsonHttpClient) Get(url string, headers map[string]string, v any) error {
 	err := doRequest("GET", url, headers, nil, v)
 	if err != nil {
 		return fmt.Errorf("could not do POST request: %s", err)
@@ -20,7 +20,7 @@ func (h *JSONHttpClient) Get(url string, headers map[string]string, v any) error
 	return nil
 }
 
-func (h *JSONHttpClient) Post(url string, headers map[string]string, body any, v any) error {
+func (h *jsonHttpClient) Post(url string, headers map[string]string, body any, v any) error {
 	err := doRequest("POST", url, headers, body, v)
 	if err != nil {
 		return fmt.Errorf("could not do POST request: %s", err)

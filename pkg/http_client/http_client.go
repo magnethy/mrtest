@@ -7,5 +7,5 @@ type HttpClient interface {
 }
 
 func NewJSONHttpClient() HttpClient {
-	return &JSONHttpClient{}
+	return &jsonHttpClient{}
 }

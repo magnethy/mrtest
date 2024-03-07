@@ -7,7 +7,7 @@ import (
 	"rmcode/pkg/http_client"
 )
 
-type YrLocationForecast struct {
+type yrLocationForecast struct {
 	Properties struct {
 		Timeseries []struct {
 			Time string `json:"time"`
@@ -23,12 +23,12 @@ type YrLocationForecast struct {
 	Type string `json:"type"`
 }
 
-type YrWeatherService struct {
+type yrWeatherService struct {
 	HttpClient http_client.HttpClient
 	Config     *config.Config
 }
 
-func (s *YrWeatherService) GetWeather() (*Weather, error) {
+func (s *yrWeatherService) GetWeather() (*Weather, error) {
 	yrData, err := s.getYrData()
 	if err != nil {
 		return &Weather{}, fmt.Errorf("got error from yr: %s", err)
@@ -40,8 +40,8 @@ func (s *YrWeatherService) GetWeather() (*Weather, error) {
 }
 
 // getYrData fetches weather data for a fixed coordinate
-func (s *YrWeatherService) getYrData() (YrLocationForecast, error) {
-	var resObj YrLocationForecast
+func (s *yrWeatherService) getYrData() (yrLocationForecast, error) {
+	var resObj yrLocationForecast
 
 	headers := map[string]string{
 		"User-Agent": s.Config.Yr.User,
@@ -49,7 +49,7 @@ func (s *YrWeatherService) getYrData() (YrLocationForecast, error) {
 
 	err := s.HttpClient.Get(s.Config.Yr.LocationForecast.Url, headers, &resObj)
 	if err != nil {
-		return YrLocationForecast{}, err
+		return yrLocationForecast{}, err
 	}
 
 	return resObj, nil

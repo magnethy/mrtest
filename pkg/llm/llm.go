@@ -11,5 +11,5 @@ type LLMService interface {
 }
 
 func NewOpenAILLMService(cfg *config.Config, httpClient http_client.HttpClient) LLMService {
-	return &OpenAILLMService{HttpClient: httpClient, Config: cfg}
+	return &openAILLMService{HttpClient: httpClient, Config: cfg}
 }
