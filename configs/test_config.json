@@ -1,0 +1,15 @@
+{
+  "yr": {
+    "user": "YR USER",
+    "locationforecast": {
+      "url": "YR API URL"
+    }
+  },
+  "openai": {
+    "key": "OPENAI KEY",
+    "chat": {
+      "url": "OPENAI CHAT URL",
+      "context": "OPENAI CHAT CONTEXT"
+    }
+  }
+}
