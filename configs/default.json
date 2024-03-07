@@ -1,0 +1,15 @@
+{
+  "yr": {
+    "user": "YOUR EMAIL ADDRESS",
+    "locationforecast": {
+      "url": "https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=60.10&lon=9.58"
+    }
+  },
+  "openai": {
+    "key": "INSERT YOUR OPENAI KEY HERE",
+    "chat": {
+      "url": "https://api.openai.com/v1/chat/completions",
+      "context": "You are a sarcastic software developer, showing signs of passive aggressiveness. Stick to one paragraph at most."
+    }
+  }
+}
