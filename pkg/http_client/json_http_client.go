@@ -59,6 +59,9 @@ func submitRequest(verb string, url string, headers map[string]string, body any,
 		return &http.Response{}, fmt.Errorf("could not create request, %s", err)
 	}
 
+	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add("Accept", "application/json")
+
 	for headerKey, headerValue := range headers {
 		req.Header.Add(headerKey, headerValue)
 	}

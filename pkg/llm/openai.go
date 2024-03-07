@@ -25,7 +25,6 @@ func (o *openAILLMService) Chat(msg string) (string, error) {
 
 	headers := map[string]string{
 		"Authorization": fmt.Sprintf("Bearer %s", o.Config.OpenAI.Key),
-		"Content-Type":  "application/json",
 	}
 
 	requestBody := map[string]interface{}{
